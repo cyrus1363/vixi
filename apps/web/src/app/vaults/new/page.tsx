@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@vixi/ui";
+import { VaultForm } from "@/components/vault-form";
 
 export default function NewVaultPage() {
   return (
@@ -12,13 +13,11 @@ export default function NewVaultPage() {
       </p>
 
       <div className="mt-8 rounded-xl border border-stone-200 bg-white p-8">
-        <p className="text-vixi-stone">
-          Vault creation form coming in Ticket 004.
-        </p>
+        <VaultForm mode="create" />
       </div>
 
       <div className="mt-6">
-        <Button variant="outline" asChild>
+        <Button variant="ghost" asChild>
           <Link href="/vaults">← Back to vaults</Link>
         </Button>
       </div>

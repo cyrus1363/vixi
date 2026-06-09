@@ -7,10 +7,12 @@ export async function getSession() {
 
 export async function requireAuth() {
   const session = await getSession();
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/login");
   }
-  return session as typeof session & { user: NonNullable<typeof session.user> };
+  return session as typeof session & {
+    user: NonNullable<typeof session.user> & { id: string };
+  };
 }
 
 export async function requireGuest() {
