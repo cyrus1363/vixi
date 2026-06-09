@@ -37,7 +37,7 @@ export async function updateVault(
   const existing = await prisma.vault.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Vault");
   return prisma.vault.update({
-    where: { id },
+    where: { id, userId },
     data: input,
   });
 }
@@ -45,5 +45,5 @@ export async function updateVault(
 export async function deleteVault(userId: string, id: string) {
   const existing = await prisma.vault.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Vault");
-  await prisma.vault.delete({ where: { id } });
+  await prisma.vault.delete({ where: { id, userId } });
 }

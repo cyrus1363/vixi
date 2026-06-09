@@ -32,7 +32,7 @@ export async function updateCheckIn(
   const existing = await prisma.checkIn.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("CheckIn");
   return prisma.checkIn.update({
-    where: { id },
+    where: { id, userId },
     data: input,
   });
 }
@@ -40,5 +40,5 @@ export async function updateCheckIn(
 export async function deleteCheckIn(userId: string, id: string) {
   const existing = await prisma.checkIn.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("CheckIn");
-  await prisma.checkIn.delete({ where: { id } });
+  await prisma.checkIn.delete({ where: { id, userId } });
 }

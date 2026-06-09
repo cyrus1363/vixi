@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Button } from "@vixi/ui";
+import { requireAuth } from "@/lib/auth";
 import { CheckInForm } from "@/components/check-in-form";
 
-export default function NewCheckInPage() {
+export default async function NewCheckInPage() {
+  await requireAuth();
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="text-3xl font-semibold tracking-tight">

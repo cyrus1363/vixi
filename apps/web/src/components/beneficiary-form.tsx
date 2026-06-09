@@ -12,17 +12,17 @@ import {
   type UpdateBeneficiaryInput,
 } from "@/lib/validations";
 
-type BeneficiaryFormProps = {
-  mode: "create" | "edit";
-  defaultValues?: Partial<CreateBeneficiaryInput>;
-  beneficiaryId?: string;
-};
+type BeneficiaryFormProps =
+  | { mode: "create"; defaultValues?: Partial<CreateBeneficiaryInput> }
+  | {
+      mode: "edit";
+      beneficiaryId: string;
+      defaultValues: Partial<CreateBeneficiaryInput>;
+    };
 
-export function BeneficiaryForm({
-  mode,
-  defaultValues,
-  beneficiaryId,
-}: BeneficiaryFormProps) {
+export function BeneficiaryForm(props: BeneficiaryFormProps) {
+  const { mode, defaultValues } = props;
+  const beneficiaryId = mode === "edit" ? props.beneficiaryId : undefined;
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CheckInStatus } from "@prisma/client";
 import { Calendar, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@vixi/ui";
 import { requireAuth } from "@/lib/auth";
@@ -9,25 +10,27 @@ import { DeleteCheckInButton } from "@/components/delete-check-in-button";
 
 type Params = { params: Promise<{ id: string }> };
 
-const statusColors: Record<string, { bg: string; text: string; label: string }> =
-  {
-    PENDING: {
-      bg: "bg-stone-100",
-      text: "text-vixi-stone",
-      label: "Pending",
-    },
-    RESPONDED: {
-      bg: "bg-green-100",
-      text: "text-green-700",
-      label: "Responded",
-    },
-    MISSED: { bg: "bg-red-100", text: "text-red-700", label: "Missed" },
-    ESCALATED: {
-      bg: "bg-vixi-gold/20",
-      text: "text-vixi-dark",
-      label: "Escalated",
-    },
-  };
+const statusColors: Record<
+  CheckInStatus,
+  { bg: string; text: string; label: string }
+> = {
+  PENDING: {
+    bg: "bg-stone-100",
+    text: "text-vixi-stone",
+    label: "Pending",
+  },
+  RESPONDED: {
+    bg: "bg-green-100",
+    text: "text-green-700",
+    label: "Responded",
+  },
+  MISSED: { bg: "bg-red-100", text: "text-red-700", label: "Missed" },
+  ESCALATED: {
+    bg: "bg-vixi-gold/20",
+    text: "text-vixi-dark",
+    label: "Escalated",
+  },
+};
 
 export default async function CheckInDetailPage({ params }: Params) {
   const session = await requireAuth();

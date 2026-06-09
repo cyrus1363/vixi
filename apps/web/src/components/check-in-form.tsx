@@ -13,11 +13,13 @@ import {
   type UpdateCheckInInput,
 } from "@/lib/validations";
 
-type CheckInFormProps = {
-  mode: "create" | "edit";
-  defaultValues?: Partial<CreateCheckInInput>;
-  checkInId?: string;
-};
+type CheckInFormProps =
+  | { mode: "create"; defaultValues?: Partial<CreateCheckInInput> }
+  | {
+      mode: "edit";
+      checkInId: string;
+      defaultValues: Partial<CreateCheckInInput>;
+    };
 
 const toLocalInputValue = (d: Date | string | undefined): string => {
   if (!d) return "";
@@ -29,11 +31,9 @@ const toLocalInputValue = (d: Date | string | undefined): string => {
   )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
-export function CheckInForm({
-  mode,
-  defaultValues,
-  checkInId,
-}: CheckInFormProps) {
+export function CheckInForm(props: CheckInFormProps) {
+  const { mode, defaultValues } = props;
+  const checkInId = mode === "edit" ? props.checkInId : undefined;
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -41,18 +41,15 @@ export function CheckInForm({
     mode === "create" ? createCheckInSchema : updateCheckInSchema;
   type FormValues = CreateCheckInInput | UpdateCheckInInput;
 
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultValues as FormValues | undefined,
+  });
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      scheduledAt: new Date() as unknown as string,
-      status: CheckInStatus.PENDING,
-      ...defaultValues,
-    } as FormValues,
-  });
+  } = form;
 
   async function onSubmit(data: FormValues) {
     setServerError(null);
@@ -63,10 +60,10 @@ export function CheckInForm({
     const payload: Record<string, unknown> = {
       scheduledAt: data.scheduledAt,
     };
-    if (data.status) {
+    if (mode === "edit" && data.status) {
       payload.status = data.status;
     }
-    if (data.completedAt) {
+    if (mode === "edit" && data.completedAt) {
       payload.completedAt = data.completedAt;
     }
 
@@ -89,12 +86,8 @@ export function CheckInForm({
     router.refresh();
   }
 
-  const scheduledDefault = toLocalInputValue(
-    defaultValues?.scheduledAt as Date | string | undefined
-  );
-  const completedDefault = toLocalInputValue(
-    defaultValues?.completedAt as Date | string | undefined
-  );
+  const scheduledDefault = toLocalInputValue(defaultValues?.scheduledAt);
+  const completedDefault = toLocalInputValue(defaultValues?.completedAt);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -125,51 +118,56 @@ export function CheckInForm({
         )}
       </div>
 
-      <div>
-        <label
-          htmlFor="status"
-          className="block text-sm font-medium text-vixi-dark"
-        >
-          Status
-        </label>
-        <select
-          id="status"
-          {...register("status")}
-          className="mt-1 block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-vixi-teal focus:ring-1 focus:ring-vixi-teal"
-        >
-          <option value="PENDING">Pending</option>
-          <option value="RESPONDED">Responded</option>
-          <option value="MISSED">Missed</option>
-          <option value="ESCALATED">Escalated</option>
-        </select>
-        {errors.status && (
-          <p className="mt-1 text-sm text-red-600">
-            {errors.status.message as string}
-          </p>
-        )}
-      </div>
-
       {mode === "edit" && (
-        <div>
-          <label
-            htmlFor="completedAt"
-            className="block text-sm font-medium text-vixi-dark"
-          >
-            Completed at (optional)
-          </label>
-          <input
-            id="completedAt"
-            type="datetime-local"
-            defaultValue={completedDefault}
-            {...register("completedAt")}
-            className="mt-1 block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-vixi-teal focus:ring-1 focus:ring-vixi-teal"
-          />
-          {errors.completedAt && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.completedAt.message as string}
-            </p>
-          )}
-        </div>
+        <>
+          <div>
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-vixi-dark"
+            >
+              Status
+            </label>
+            <select
+              id="status"
+              defaultValue={
+                (defaultValues?.status as CheckInStatus) ?? CheckInStatus.PENDING
+              }
+              {...register("status")}
+              className="mt-1 block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-vixi-teal focus:ring-1 focus:ring-vixi-teal"
+            >
+              <option value="PENDING">Pending</option>
+              <option value="RESPONDED">Responded</option>
+              <option value="MISSED">Missed</option>
+              <option value="ESCALATED">Escalated</option>
+            </select>
+            {errors.status && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.status.message as string}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="completedAt"
+              className="block text-sm font-medium text-vixi-dark"
+            >
+              Completed at (optional)
+            </label>
+            <input
+              id="completedAt"
+              type="datetime-local"
+              defaultValue={completedDefault}
+              {...register("completedAt")}
+              className="mt-1 block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-vixi-teal focus:ring-1 focus:ring-vixi-teal"
+            />
+            {errors.completedAt && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.completedAt.message as string}
+              </p>
+            )}
+          </div>
+        </>
       )}
 
       <div className="flex gap-3">

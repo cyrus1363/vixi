@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Button } from "@vixi/ui";
+import { requireAuth } from "@/lib/auth";
 import { BeneficiaryForm } from "@/components/beneficiary-form";
 
-export default function NewBeneficiaryPage() {
+export default async function NewBeneficiaryPage() {
+  await requireAuth();
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="text-3xl font-semibold tracking-tight">

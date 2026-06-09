@@ -29,7 +29,7 @@ export async function updateMemory(
   const existing = await prisma.memory.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Memory");
   return prisma.memory.update({
-    where: { id },
+    where: { id, userId },
     data: input,
   });
 }
@@ -37,5 +37,5 @@ export async function updateMemory(
 export async function deleteMemory(userId: string, id: string) {
   const existing = await prisma.memory.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Memory");
-  await prisma.memory.delete({ where: { id } });
+  await prisma.memory.delete({ where: { id, userId } });
 }

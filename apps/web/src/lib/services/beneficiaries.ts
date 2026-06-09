@@ -39,7 +39,7 @@ export async function updateBeneficiary(
   });
   if (!existing) throw new NotFoundError("Beneficiary");
   return prisma.beneficiary.update({
-    where: { id },
+    where: { id, userId },
     data: input,
   });
 }
@@ -49,5 +49,5 @@ export async function deleteBeneficiary(userId: string, id: string) {
     where: { id, userId },
   });
   if (!existing) throw new NotFoundError("Beneficiary");
-  await prisma.beneficiary.delete({ where: { id } });
+  await prisma.beneficiary.delete({ where: { id, userId } });
 }

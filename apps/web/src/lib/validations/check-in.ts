@@ -7,7 +7,16 @@ const baseCheckInSchema = z.object({
   status: z.nativeEnum(CheckInStatus).default(CheckInStatus.PENDING),
 });
 
-export const createCheckInSchema = baseCheckInSchema.strict();
+export const createCheckInSchema = baseCheckInSchema
+  .strict()
+  .refine((data) => data.scheduledAt >= new Date(), {
+    message: "Scheduled date must be in the future",
+    path: ["scheduledAt"],
+  })
+  .refine((data) => data.status === CheckInStatus.PENDING, {
+    message: "New check-ins must start as PENDING",
+    path: ["status"],
+  });
 
 export const updateCheckInSchema = baseCheckInSchema.partial().strict();
 
