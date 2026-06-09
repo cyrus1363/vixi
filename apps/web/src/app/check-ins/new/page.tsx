@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@vixi/ui";
+import { CheckInForm } from "@/components/check-in-form";
 
 export default function NewCheckInPage() {
   return (
@@ -8,17 +9,15 @@ export default function NewCheckInPage() {
         Schedule a check-in
       </h1>
       <p className="mt-2 text-vixi-stone">
-        Configure a periodic wellness reminder to keep your plan active.
+        Set a future date to confirm you&apos;re still in control.
       </p>
 
       <div className="mt-8 rounded-xl border border-stone-200 bg-white p-8">
-        <p className="text-vixi-stone">
-          Check-in configuration form coming in Ticket 008.
-        </p>
+        <CheckInForm mode="create" />
       </div>
 
       <div className="mt-6">
-        <Button variant="outline" asChild>
+        <Button variant="ghost" asChild>
           <Link href="/check-ins">← Back to check-ins</Link>
         </Button>
       </div>
