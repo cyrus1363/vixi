@@ -15,6 +15,11 @@ for (const key of requiredEnvVars) {
 
 const nextConfig = {
   transpilePackages: ["@vixi/ui", "@vixi/auth", "@vixi/db"],
+  env: {
+    NEXT_PUBLIC_GOOGLE_ENABLED: Boolean(
+      process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+    ),
+  },
 };
 
 module.exports = nextConfig;

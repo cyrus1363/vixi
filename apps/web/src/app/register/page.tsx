@@ -50,7 +50,7 @@ export default function RegisterPage() {
     router.refresh();
   }
 
-  const googleEnabled = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+  const googleEnabled = Boolean(process.env.NEXT_PUBLIC_GOOGLE_ENABLED);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6">

@@ -4,13 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Button } from "@vixi/ui";
+import {
+  Home,
+  Lock,
+  Camera,
+  Users,
+  Clock,
+  LogOut,
+} from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: "🏠" },
-  { href: "/vaults", label: "Vaults", icon: "🔒" },
-  { href: "/memories", label: "Memories", icon: "📸" },
-  { href: "/beneficiaries", label: "Beneficiaries", icon: "👥" },
-  { href: "/check-ins", label: "Check-ins", icon: "⏰" },
+  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/vaults", label: "Vaults", icon: Lock },
+  { href: "/memories", label: "Memories", icon: Camera },
+  { href: "/beneficiaries", label: "Beneficiaries", icon: Users },
+  { href: "/check-ins", label: "Check-ins", icon: Clock },
 ];
 
 export function Sidebar() {
@@ -26,7 +34,9 @@ export function Sidebar() {
       <nav className="flex-1 px-4 py-4">
         <ul className="space-y-1">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active =
+              pathname === item.href || pathname.startsWith(item.href + "/");
+            const Icon = item.icon;
             return (
               <li key={item.href}>
                 <Link
@@ -37,7 +47,7 @@ export function Sidebar() {
                       : "text-vixi-stone hover:bg-stone-50 hover:text-vixi-dark"
                   }`}
                 >
-                  <span className="text-lg">{item.icon}</span>
+                  <Icon className="h-5 w-5" aria-hidden="true" />
                   {item.label}
                 </Link>
               </li>
@@ -52,7 +62,7 @@ export function Sidebar() {
           className="w-full justify-start text-vixi-stone hover:text-vixi-dark"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
-          <span className="mr-2 text-lg">🚪</span>
+          <LogOut className="mr-2 h-5 w-5" aria-hidden="true" />
           Sign out
         </Button>
       </div>

@@ -44,7 +44,7 @@ const providers: NextAuthConfig["providers"] = [
   }),
 ];
 
-const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
 if (googleClientId && googleClientSecret) {
