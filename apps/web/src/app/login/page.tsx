@@ -33,6 +33,8 @@ export default function LoginPage() {
     }
   }
 
+  const googleEnabled = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
@@ -90,25 +92,29 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-stone-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-vixi-cream px-2 text-vixi-stone">or</span>
-          </div>
-        </div>
+        {googleEnabled && (
+          <>
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-stone-200" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-vixi-cream px-2 text-vixi-stone">or</span>
+              </div>
+            </div>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-        >
-          Continue with Google
-        </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Continue with Google
+            </Button>
+          </>
+        )}
 
         <p className="mt-6 text-center text-sm text-vixi-stone">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/register"
             className="font-medium text-vixi-teal hover:underline"

@@ -16,7 +16,7 @@ export default async function DashboardPage() {
         Welcome back, {session.user.name || session.user.email}
       </h1>
       <p className="mt-2 text-vixi-stone">
-        Here's an overview of your legacy plan.
+        Here&apos;s an overview of your legacy plan.
       </p>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-2 text-3xl font-semibold">{beneficiaryCount}</div>
           <p className="mt-1 text-xs text-vixi-stone">
-            People you've designated to receive your legacy.
+            People you&apos;ve designated to receive your legacy.
           </p>
         </div>
 

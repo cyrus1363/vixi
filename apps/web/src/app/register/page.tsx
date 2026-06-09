@@ -35,15 +35,22 @@ export default function RegisterPage() {
       return;
     }
 
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
       redirect: false,
     });
 
+    if (result?.error) {
+      setError("Account created, but sign-in failed. Please log in manually.");
+      return;
+    }
+
     router.push("/dashboard");
     router.refresh();
   }
+
+  const googleEnabled = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6">
@@ -121,22 +128,26 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-stone-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-vixi-cream px-2 text-vixi-stone">or</span>
-          </div>
-        </div>
+        {googleEnabled && (
+          <>
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-stone-200" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-vixi-cream px-2 text-vixi-stone">or</span>
+              </div>
+            </div>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-        >
-          Continue with Google
-        </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Continue with Google
+            </Button>
+          </>
+        )}
 
         <p className="mt-6 text-center text-sm text-vixi-stone">
           Already have an account?{" "}
