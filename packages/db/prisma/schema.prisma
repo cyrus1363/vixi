@@ -54,6 +54,7 @@ model User {
   beneficiaries Beneficiary[]
   memories      Memory[]
   checkIns      CheckIn[]
+  auditLogs     AuditLog[]
 
   @@map("users")
 }
@@ -172,4 +173,26 @@ enum CheckInStatus {
   RESPONDED
   MISSED
   ESCALATED
+}
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  userId     String      @map("user_id")
+  action     AuditAction
+  entityType String      @map("entity_type")
+  entityId   String?     @map("entity_id")
+  metadata   Json?
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  VIEW
 }
