@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { VaultType, VaultStatus } from "@prisma/client";
+import { Badge, type BadgeProps } from "@vixi/ui";
 
 const VAULT_TYPE_LABELS: Record<VaultType, string> = {
   GENERAL: "General",
@@ -10,10 +11,10 @@ const VAULT_TYPE_LABELS: Record<VaultType, string> = {
   MESSAGES: "Messages",
 };
 
-const VAULT_STATUS_STYLES: Record<VaultStatus, string> = {
-  ACTIVE: "bg-emerald-100 text-emerald-700",
-  SEALED: "bg-amber-100 text-amber-700",
-  UNLOCKED: "bg-sky-100 text-sky-700",
+const VAULT_STATUS_VARIANT: Record<VaultStatus, BadgeProps["variant"]> = {
+  ACTIVE: "active",
+  SEALED: "sealed",
+  UNLOCKED: "unlocked",
 };
 
 type VaultCardProps = {
@@ -36,15 +37,13 @@ export function VaultCard({
   return (
     <Link
       href={`/vaults/${id}`}
-      className="block rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition hover:border-vixi-teal hover:shadow-md"
+      className="block rounded-xl border border-stone-200 bg-white p-6 shadow-sm outline-none motion-safe:transition focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 motion-safe:hover:border-vixi-teal motion-safe:hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-lg font-semibold text-vixi-dark">{name}</h3>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${VAULT_STATUS_STYLES[status]}`}
-        >
+        <h3 className="font-heading text-lg font-bold text-vixi-dark">{name}</h3>
+        <Badge variant={VAULT_STATUS_VARIANT[status]}>
           {status.toLowerCase()}
-        </span>
+        </Badge>
       </div>
       {description && (
         <p className="mt-2 line-clamp-2 text-sm text-vixi-stone">
@@ -52,9 +51,7 @@ export function VaultCard({
         </p>
       )}
       <div className="mt-4 flex items-center justify-between text-xs text-vixi-stone">
-        <span className="rounded-md bg-stone-100 px-2 py-0.5 font-medium">
-          {VAULT_TYPE_LABELS[type]}
-        </span>
+        <Badge variant="neutral">{VAULT_TYPE_LABELS[type]}</Badge>
         <span>
           {contentCount} {contentCount === 1 ? "item" : "items"}
         </span>

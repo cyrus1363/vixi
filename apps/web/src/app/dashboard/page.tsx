@@ -1,9 +1,19 @@
 import Link from "next/link";
-import { Button } from "@vixi/ui";
+import { Suspense } from "react";
+import { Button, Card } from "@vixi/ui";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@vixi/db";
+import { DashboardSkeleton } from "./skeleton";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+async function DashboardContent() {
   const session = await requireAuth();
 
   const [vaultCount, beneficiaryCount, memoryCount] = await Promise.all([
@@ -14,7 +24,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="text-3xl font-semibold tracking-tight">
+      <h1 className="font-heading text-3xl font-bold tracking-tight">
         Welcome back, {session.user.name || session.user.email}
       </h1>
       <p className="mt-2 text-vixi-stone">
@@ -22,35 +32,41 @@ export default async function DashboardPage() {
       </p>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
+        <Card className="p-6">
           <div className="text-sm font-medium text-vixi-stone">Vaults</div>
-          <div className="mt-2 text-3xl font-semibold">{vaultCount}</div>
+          <div className="mt-2 text-3xl font-bold text-vixi-gold">
+            {vaultCount}
+          </div>
           <p className="mt-1 text-xs text-vixi-stone">
             Secure containers for your important documents and messages.
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
+        <Card className="p-6">
           <div className="text-sm font-medium text-vixi-stone">
             Beneficiaries
           </div>
-          <div className="mt-2 text-3xl font-semibold">{beneficiaryCount}</div>
+          <div className="mt-2 text-3xl font-bold text-vixi-gold">
+            {beneficiaryCount}
+          </div>
           <p className="mt-1 text-xs text-vixi-stone">
             People you&apos;ve designated to receive your legacy.
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
+        <Card className="p-6">
           <div className="text-sm font-medium text-vixi-stone">Memories</div>
-          <div className="mt-2 text-3xl font-semibold">{memoryCount}</div>
+          <div className="mt-2 text-3xl font-bold text-vixi-gold">
+            {memoryCount}
+          </div>
           <p className="mt-1 text-xs text-vixi-stone">
             Cherished moments preserved for future generations.
           </p>
-        </div>
+        </Card>
       </div>
 
-      <div className="mt-10 rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold">Quick actions</h2>
+      <Card className="mt-10 p-6">
+        <h2 className="font-heading text-lg font-bold">Quick actions</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button asChild>
             <Link href="/vaults/new">+ Create new vault</Link>
@@ -65,7 +81,7 @@ export default async function DashboardPage() {
             <Link href="/check-ins/new">+ Schedule check-in</Link>
           </Button>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

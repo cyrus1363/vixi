@@ -50,7 +50,9 @@ export function DeleteVaultButton({
         be undone.
       </p>
       {error && (
-        <p className="mt-2 text-sm text-red-700">{error}</p>
+        <p role="alert" className="mt-2 text-sm text-red-700">
+          {error}
+        </p>
       )}
       <div className="mt-3 flex gap-2">
         <Button

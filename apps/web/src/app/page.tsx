@@ -12,7 +12,7 @@ export default function HomePage() {
         <nav className="flex items-center gap-4">
           <Link
             href="/login"
-            className="text-sm font-medium text-vixi-stone hover:text-vixi-dark"
+            className="rounded text-sm font-medium text-vixi-stone outline-none hover:text-vixi-dark focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2"
           >
             Log in
           </Link>
@@ -23,7 +23,7 @@ export default function HomePage() {
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-vixi-dark sm:text-5xl lg:text-6xl">
+        <h1 className="max-w-3xl font-heading text-4xl font-bold tracking-tight text-vixi-dark sm:text-5xl lg:text-6xl">
           Plan your legacy. <br />
           <span className="text-vixi-teal">Preserve what matters.</span>
         </h1>
@@ -33,7 +33,11 @@ export default function HomePage() {
           place.
         </p>
         <div className="mt-10 flex gap-4">
-          <Button size="lg" asChild>
+          <Button
+            size="lg"
+            className="bg-vixi-gold text-white hover:bg-vixi-gold/90 focus-visible:ring-vixi-gold"
+            asChild
+          >
             <Link href="/register">Start your legacy</Link>
           </Button>
           <Button size="lg" variant="outline" asChild>

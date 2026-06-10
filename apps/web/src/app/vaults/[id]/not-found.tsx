@@ -4,7 +4,7 @@ import { Button } from "@vixi/ui";
 export default function VaultNotFound() {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      <h1 className="text-4xl font-semibold tracking-tight text-vixi-dark">
+      <h1 className="font-heading text-4xl font-bold tracking-tight text-vixi-dark">
         Vault not found
       </h1>
       <p className="mt-4 text-vixi-stone">

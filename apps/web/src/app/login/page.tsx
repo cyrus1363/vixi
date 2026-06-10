@@ -43,13 +43,16 @@ export default function LoginPage() {
           <span className="text-xl font-semibold tracking-tight">Vixi</span>
         </div>
 
-        <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+        <h1 className="font-heading text-2xl font-bold tracking-tight">Welcome back</h1>
         <p className="mt-2 text-sm text-vixi-stone">
           Sign in to continue to your legacy dashboard.
         </p>
 
         {error && (
-          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div
+            role="alert"
+            className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             {error}
           </div>
         )}
@@ -117,7 +120,7 @@ export default function LoginPage() {
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="font-medium text-vixi-teal hover:underline"
+            className="rounded font-medium text-vixi-teal outline-none hover:underline focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2"
           >
             Get started
           </Link>

@@ -19,7 +19,7 @@ export function MemoryCard({
   return (
     <Link
       href={`/memories/${id}`}
-      className="block rounded-xl border border-stone-200 bg-white shadow-sm transition hover:border-vixi-teal hover:shadow-md"
+      className="block rounded-xl border border-stone-200 bg-white shadow-sm outline-none motion-safe:transition focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 motion-safe:hover:border-vixi-teal motion-safe:hover:shadow-md"
     >
       {mediaUrl && (
         <div className="relative h-40 w-full overflow-hidden rounded-t-xl bg-stone-100">
@@ -34,7 +34,7 @@ export function MemoryCard({
         </div>
       )}
       <div className="p-5">
-        <h3 className="line-clamp-1 text-lg font-semibold text-vixi-dark">
+        <h3 className="line-clamp-1 font-heading text-lg font-bold text-vixi-dark">
           {title}
         </h3>
         <p className="mt-2 line-clamp-3 text-sm text-vixi-stone">{body}</p>

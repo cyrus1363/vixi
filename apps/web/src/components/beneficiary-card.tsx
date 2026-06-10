@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, ShieldCheck, Shield } from "lucide-react";
+import { Badge } from "@vixi/ui";
 
 type BeneficiaryCardProps = {
   id: string;
@@ -19,11 +20,11 @@ export function BeneficiaryCard({
   return (
     <Link
       href={`/beneficiaries/${id}`}
-      className="block rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition hover:border-vixi-teal hover:shadow-md"
+      className="block rounded-xl border border-stone-200 bg-white p-5 shadow-sm outline-none motion-safe:transition focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 motion-safe:hover:border-vixi-teal motion-safe:hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="line-clamp-1 text-lg font-semibold text-vixi-dark">
+          <h3 className="line-clamp-1 font-heading text-lg font-bold text-vixi-dark">
             {name}
           </h3>
           {relationship && (
@@ -31,21 +32,15 @@ export function BeneficiaryCard({
           )}
         </div>
         {trusted ? (
-          <span
-            className="inline-flex items-center gap-1 rounded-full bg-vixi-teal/10 px-2 py-0.5 text-xs font-medium text-vixi-teal"
-            title="Trusted beneficiary"
-          >
+          <Badge variant="trusted" title="Trusted beneficiary">
             <ShieldCheck className="h-3 w-3" />
             Trusted
-          </span>
+          </Badge>
         ) : (
-          <span
-            className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-vixi-stone"
-            title="Standard beneficiary"
-          >
+          <Badge variant="standard" title="Standard beneficiary">
             <Shield className="h-3 w-3" />
             Standard
-          </span>
+          </Badge>
         )}
       </div>
       <div className="mt-3 flex items-center gap-2 text-sm text-vixi-stone">

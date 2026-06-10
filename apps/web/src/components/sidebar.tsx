@@ -41,10 +41,10 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg border-l-2 px-3 py-2 text-sm font-medium outline-none motion-safe:transition-colors focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 ${
                     active
-                      ? "bg-vixi-sand text-vixi-dark"
-                      : "text-vixi-stone hover:bg-stone-50 hover:text-vixi-dark"
+                      ? "border-l-vixi-gold bg-vixi-sand text-vixi-dark"
+                      : "border-l-transparent text-vixi-stone hover:bg-stone-50 hover:text-vixi-dark"
                   }`}
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />

@@ -1,15 +1,25 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Mail, Phone, Shield, ShieldCheck } from "lucide-react";
-import { Button } from "@vixi/ui";
+import { Badge, Button, Card } from "@vixi/ui";
 import { requireAuth } from "@/lib/auth";
 import { getBeneficiary } from "@/lib/services";
 import { NotFoundError } from "@/lib/errors";
 import { DeleteBeneficiaryButton } from "@/components/delete-beneficiary-button";
+import { BeneficiaryDetailSkeleton } from "./skeleton";
 
 type Params = { params: Promise<{ id: string }> };
 
-export default async function BeneficiaryDetailPage({ params }: Params) {
+export default function BeneficiaryDetailPage({ params }: Params) {
+  return (
+    <Suspense fallback={<BeneficiaryDetailSkeleton />}>
+      <BeneficiaryDetailContent params={params} />
+    </Suspense>
+  );
+}
+
+async function BeneficiaryDetailContent({ params }: Params) {
   const session = await requireAuth();
   const { id } = await params;
 
@@ -26,30 +36,33 @@ export default async function BeneficiaryDetailPage({ params }: Params) {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="flex items-center gap-2 text-sm text-vixi-stone">
-        <Link href="/beneficiaries" className="hover:underline">
+        <Link
+          href="/beneficiaries"
+          className="rounded outline-none hover:underline focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2"
+        >
           Beneficiaries
         </Link>
         <span>/</span>
         <span>{beneficiary.name}</span>
       </div>
       <div className="mt-2 flex items-center gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <h1 className="font-heading text-3xl font-bold tracking-tight">
           {beneficiary.name}
         </h1>
         {beneficiary.trusted ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-vixi-teal/10 px-2 py-0.5 text-xs font-medium text-vixi-teal">
+          <Badge variant="trusted">
             <ShieldCheck className="h-3 w-3" />
             Trusted
-          </span>
+          </Badge>
         ) : (
-          <span className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-vixi-stone">
+          <Badge variant="standard">
             <Shield className="h-3 w-3" />
             Standard
-          </span>
+          </Badge>
         )}
       </div>
 
-      <div className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
+      <Card className="mt-6 p-6">
         <dl className="space-y-4">
           <div className="flex items-center gap-3">
             <Mail className="h-5 w-5 text-vixi-stone" />
@@ -78,7 +91,7 @@ export default async function BeneficiaryDetailPage({ params }: Params) {
             </div>
           )}
         </dl>
-      </div>
+      </Card>
 
       <div className="mt-6 flex gap-2">
         <Button asChild>

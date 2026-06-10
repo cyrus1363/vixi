@@ -1,38 +1,40 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { CheckInStatus } from "@prisma/client";
 import { Calendar, CheckCircle2, XCircle } from "lucide-react";
-import { Button } from "@vixi/ui";
+import { Badge, Button, Card, type BadgeProps } from "@vixi/ui";
 import { requireAuth } from "@/lib/auth";
 import { getCheckIn } from "@/lib/services";
 import { NotFoundError } from "@/lib/errors";
 import { DeleteCheckInButton } from "@/components/delete-check-in-button";
+import { CheckInDetailSkeleton } from "./skeleton";
 
 type Params = { params: Promise<{ id: string }> };
 
-const statusColors: Record<
-  CheckInStatus,
-  { bg: string; text: string; label: string }
-> = {
-  PENDING: {
-    bg: "bg-stone-100",
-    text: "text-vixi-stone",
-    label: "Pending",
-  },
-  RESPONDED: {
-    bg: "bg-green-100",
-    text: "text-green-700",
-    label: "Responded",
-  },
-  MISSED: { bg: "bg-red-100", text: "text-red-700", label: "Missed" },
-  ESCALATED: {
-    bg: "bg-vixi-gold/20",
-    text: "text-vixi-dark",
-    label: "Escalated",
-  },
+const statusVariant: Record<CheckInStatus, BadgeProps["variant"]> = {
+  PENDING: "pending",
+  RESPONDED: "responded",
+  MISSED: "missed",
+  ESCALATED: "escalated",
 };
 
-export default async function CheckInDetailPage({ params }: Params) {
+const statusLabel: Record<CheckInStatus, string> = {
+  PENDING: "Pending",
+  RESPONDED: "Responded",
+  MISSED: "Missed",
+  ESCALATED: "Escalated",
+};
+
+export default function CheckInDetailPage({ params }: Params) {
+  return (
+    <Suspense fallback={<CheckInDetailSkeleton />}>
+      <CheckInDetailContent params={params} />
+    </Suspense>
+  );
+}
+
+async function CheckInDetailContent({ params }: Params) {
   const session = await requireAuth();
   const { id } = await params;
 
@@ -46,35 +48,35 @@ export default async function CheckInDetailPage({ params }: Params) {
     throw err;
   }
 
-  const colors = statusColors[checkIn.status] ?? statusColors.PENDING;
   const scheduledDate = new Date(checkIn.scheduledAt);
 
   return (
     <div className="mx-auto max-w-3xl">
       <div className="flex items-center gap-2 text-sm text-vixi-stone">
-        <Link href="/check-ins" className="hover:underline">
+        <Link
+          href="/check-ins"
+          className="rounded outline-none hover:underline focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2"
+        >
           Check-ins
         </Link>
         <span>/</span>
         <span>{scheduledDate.toLocaleDateString()}</span>
       </div>
       <div className="mt-2 flex items-center gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <h1 className="font-heading text-3xl font-bold tracking-tight">
           Check-in on {scheduledDate.toLocaleDateString()}
         </h1>
-        <span
-          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${colors.bg} ${colors.text}`}
-        >
+        <Badge variant={statusVariant[checkIn.status]}>
           {checkIn.status === "RESPONDED" ? (
             <CheckCircle2 className="h-3 w-3" />
           ) : checkIn.status === "MISSED" ? (
             <XCircle className="h-3 w-3" />
           ) : null}
-          {colors.label}
-        </span>
+          {statusLabel[checkIn.status]}
+        </Badge>
       </div>
 
-      <div className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
+      <Card className="mt-6 p-6">
         <dl className="space-y-4">
           <div className="flex items-center gap-3">
             <Calendar className="h-5 w-5 text-vixi-stone" />
@@ -94,7 +96,7 @@ export default async function CheckInDetailPage({ params }: Params) {
             </div>
           )}
         </dl>
-      </div>
+      </Card>
 
       <div className="mt-6 flex gap-2">
         <Button asChild>

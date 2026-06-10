@@ -49,7 +49,11 @@ export function DeleteBeneficiaryButton({
         <span className="font-semibold">{beneficiaryName}</span> from your
         beneficiaries? This action cannot be undone.
       </p>
-      {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
+      {error && (
+        <p role="alert" className="mt-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
       <div className="mt-3 flex gap-2">
         <Button
           variant="destructive"

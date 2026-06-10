@@ -1,23 +1,20 @@
 import Link from "next/link";
 import { Calendar } from "lucide-react";
 import { CheckInStatus } from "@prisma/client";
+import { Badge, type BadgeProps } from "@vixi/ui";
 
-const statusColors: Record<
-  CheckInStatus,
-  { bg: string; text: string; label: string }
-> = {
-  PENDING: { bg: "bg-stone-100", text: "text-vixi-stone", label: "Pending" },
-  RESPONDED: {
-    bg: "bg-green-100",
-    text: "text-green-700",
-    label: "Responded",
-  },
-  MISSED: { bg: "bg-red-100", text: "text-red-700", label: "Missed" },
-  ESCALATED: {
-    bg: "bg-vixi-gold/20",
-    text: "text-vixi-dark",
-    label: "Escalated",
-  },
+const statusVariant: Record<CheckInStatus, BadgeProps["variant"]> = {
+  PENDING: "pending",
+  RESPONDED: "responded",
+  MISSED: "missed",
+  ESCALATED: "escalated",
+};
+
+const statusLabel: Record<CheckInStatus, string> = {
+  PENDING: "Pending",
+  RESPONDED: "Responded",
+  MISSED: "Missed",
+  ESCALATED: "Escalated",
 };
 
 type CheckInCardProps = {
@@ -33,13 +30,12 @@ export function CheckInCard({
   status,
   completedAt,
 }: CheckInCardProps) {
-  const colors = statusColors[status] ?? statusColors.PENDING;
   const date = new Date(scheduledAt);
 
   return (
     <Link
       href={`/check-ins/${id}`}
-      className="block rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition hover:border-vixi-teal hover:shadow-md"
+      className="block rounded-xl border border-stone-200 bg-white p-5 shadow-sm outline-none motion-safe:transition focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 motion-safe:hover:border-vixi-teal motion-safe:hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <div>
@@ -51,11 +47,9 @@ export function CheckInCard({
             {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </p>
         </div>
-        <span
-          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${colors.bg} ${colors.text}`}
-        >
-          {colors.label}
-        </span>
+        <Badge variant={statusVariant[status]}>
+          {statusLabel[status]}
+        </Badge>
       </div>
       {completedAt && (
         <p className="mt-3 text-xs text-vixi-stone">
