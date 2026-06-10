@@ -109,9 +109,12 @@ model Beneficiary {
   email       String
   phone       String?
   relationship String?
-  trusted     Boolean  @default(false)
-  notified    Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
+  trusted      Boolean         @default(false)
+  notified     Boolean         @default(false)
+  role         BeneficiaryRole @default(BENEFICIARY)
+  accessLevel  AccessLevel     @default(NONE)
+  inviteStatus InviteStatus    @default(NOT_INVITED)
+  createdAt    DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -217,4 +220,27 @@ enum ConsentType {
   PRIVACY_POLICY
   NOT_LEGAL_ADVICE_DISCLAIMER
   AI_AVATAR_CONSENT
+}
+
+enum BeneficiaryRole {
+  EXECUTOR
+  BENEFICIARY
+  EMERGENCY_CONTACT
+  MEMORY_RECIPIENT
+  PET_CARETAKER
+  FUNERAL_CONTACT
+}
+
+enum AccessLevel {
+  NONE
+  SUMMARY
+  SPECIFIC_ITEMS
+  FULL_AFTER_RELEASE
+}
+
+enum InviteStatus {
+  NOT_INVITED
+  INVITED
+  ACCEPTED
+  DECLINED
 }

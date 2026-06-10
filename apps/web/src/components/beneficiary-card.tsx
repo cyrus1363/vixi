@@ -2,12 +2,22 @@ import Link from "next/link";
 import { Mail, ShieldCheck, Shield } from "lucide-react";
 import { Badge } from "@vixi/ui";
 
+const ROLE_LABELS: Record<string, string> = {
+  EXECUTOR: "Executor",
+  BENEFICIARY: "Beneficiary",
+  EMERGENCY_CONTACT: "Emergency Contact",
+  MEMORY_RECIPIENT: "Memory Recipient",
+  PET_CARETAKER: "Pet Caretaker",
+  FUNERAL_CONTACT: "Funeral Contact",
+};
+
 type BeneficiaryCardProps = {
   id: string;
   name: string;
   email: string;
   relationship: string | null;
   trusted: boolean;
+  role: string;
 };
 
 export function BeneficiaryCard({
@@ -16,6 +26,7 @@ export function BeneficiaryCard({
   email,
   relationship,
   trusted,
+  role,
 }: BeneficiaryCardProps) {
   return (
     <Link
@@ -30,6 +41,9 @@ export function BeneficiaryCard({
           {relationship && (
             <p className="mt-0.5 text-xs text-vixi-stone">{relationship}</p>
           )}
+          <span className="mt-1 inline-block rounded-md bg-stone-100 px-1.5 py-0.5 text-xs font-medium text-vixi-stone">
+            {ROLE_LABELS[role] ?? role}
+          </span>
         </div>
         {trusted ? (
           <Badge variant="trusted" title="Trusted beneficiary">

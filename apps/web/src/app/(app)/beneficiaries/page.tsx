@@ -13,7 +13,7 @@ export default function BeneficiariesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-heading text-3xl font-bold tracking-tight">
-            Your Beneficiaries
+            Trusted Contacts
           </h1>
           <p className="mt-2 text-vixi-stone">
             People you trust to receive your legacy.
@@ -60,6 +60,7 @@ async function BeneficiariesContent() {
           email={beneficiary.email}
           relationship={beneficiary.relationship}
           trusted={beneficiary.trusted}
+          role={beneficiary.role}
         />
       ))}
     </div>

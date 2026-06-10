@@ -58,6 +58,9 @@ export default async function EditBeneficiaryPage({ params }: Params) {
             phone: beneficiary.phone ?? "",
             relationship: beneficiary.relationship ?? "",
             trusted: beneficiary.trusted,
+            role: beneficiary.role,
+            accessLevel: beneficiary.accessLevel,
+            inviteStatus: beneficiary.inviteStatus,
           }}
         />
       </Card>

@@ -91,3 +91,41 @@ describe("updateBeneficiarySchema", () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe("role / accessLevel / inviteStatus fields", () => {
+  it("accepts valid role", () => {
+    const result = createBeneficiarySchema.safeParse({
+      name: "Alice",
+      email: "alice@example.com",
+      role: "EXECUTOR",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects invalid role", () => {
+    const result = createBeneficiarySchema.safeParse({
+      name: "Alice",
+      email: "alice@example.com",
+      role: "RANDOM_ROLE",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts valid accessLevel", () => {
+    const result = createBeneficiarySchema.safeParse({
+      name: "Alice",
+      email: "alice@example.com",
+      accessLevel: "FULL_AFTER_RELEASE",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts valid inviteStatus", () => {
+    const result = createBeneficiarySchema.safeParse({
+      name: "Alice",
+      email: "alice@example.com",
+      inviteStatus: "INVITED",
+    });
+    expect(result.success).toBe(true);
+  });
+});

@@ -42,6 +42,9 @@ export function BeneficiaryForm(props: BeneficiaryFormProps) {
       phone: "",
       relationship: "",
       trusted: false,
+      role: "BENEFICIARY",
+      accessLevel: "NONE",
+      inviteStatus: "NOT_INVITED",
       ...defaultValues,
     } as FormValues,
   });
@@ -190,6 +193,36 @@ export function BeneficiaryForm(props: BeneficiaryFormProps) {
         <label htmlFor="trusted" className="text-sm text-vixi-dark">
           Mark as trusted beneficiary
         </label>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-vixi-dark">Role</label>
+        <select
+          {...register("role")}
+          className="mt-1 w-full rounded-lg border border-stone-200 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-vixi-teal"
+        >
+          <option value="BENEFICIARY">Beneficiary</option>
+          <option value="EXECUTOR">Executor</option>
+          <option value="EMERGENCY_CONTACT">Emergency Contact</option>
+          <option value="MEMORY_RECIPIENT">Memory Recipient</option>
+          <option value="PET_CARETAKER">Pet Caretaker</option>
+          <option value="FUNERAL_CONTACT">Funeral Contact</option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-vixi-dark">Access Level</label>
+        <select
+          {...register("accessLevel")}
+          className="mt-1 w-full rounded-lg border border-stone-200 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-vixi-teal"
+        >
+          <option value="NONE">None</option>
+          <option value="SUMMARY">Summary</option>
+          <option value="SPECIFIC_ITEMS">Specific Items</option>
+          <option value="FULL_AFTER_RELEASE">Full After Release</option>
+        </select>
+        <p className="mt-1 text-xs text-vixi-stone">
+          Notifications and access grants are not automatic — these settings take effect when release rules are configured.
+        </p>
       </div>
 
       <div className="flex gap-3">

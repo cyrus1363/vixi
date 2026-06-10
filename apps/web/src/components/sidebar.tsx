@@ -17,7 +17,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/vaults", label: "Vaults", icon: Lock },
   { href: "/memories", label: "Memories", icon: Camera },
-  { href: "/beneficiaries", label: "Beneficiaries", icon: Users },
+  { href: "/beneficiaries", label: "Trusted Contacts", icon: Users },
   { href: "/check-ins", label: "Check-ins", icon: Clock },
 ];
 
