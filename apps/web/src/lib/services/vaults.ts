@@ -3,6 +3,7 @@ import "server-only";
 import { prisma } from "@vixi/db";
 import type { CreateVaultInput, UpdateVaultInput } from "@/lib/validations";
 import { NotFoundError } from "@/lib/errors";
+import { logAuditEvent } from "./audit";
 
 export async function getVaults(userId: string) {
   return prisma.vault.findMany({
@@ -26,9 +27,9 @@ export async function getVault(userId: string, id: string) {
 }
 
 export async function createVault(userId: string, input: CreateVaultInput) {
-  return prisma.vault.create({
-    data: { ...input, userId },
-  });
+  const vault = await prisma.vault.create({ data: { ...input, userId } });
+  await logAuditEvent({ userId, action: "CREATE", entityType: "Vault", entityId: vault.id, metadata: { type: vault.type } });
+  return vault;
 }
 
 export async function updateVault(
@@ -38,14 +39,14 @@ export async function updateVault(
 ) {
   const existing = await prisma.vault.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Vault");
-  return prisma.vault.update({
-    where: { id, userId },
-    data: input,
-  });
+  const vault = await prisma.vault.update({ where: { id, userId }, data: input });
+  await logAuditEvent({ userId, action: "UPDATE", entityType: "Vault", entityId: id });
+  return vault;
 }
 
 export async function deleteVault(userId: string, id: string) {
   const existing = await prisma.vault.findFirst({ where: { id, userId } });
   if (!existing) throw new NotFoundError("Vault");
   await prisma.vault.delete({ where: { id, userId } });
+  await logAuditEvent({ userId, action: "DELETE", entityType: "Vault", entityId: id });
 }

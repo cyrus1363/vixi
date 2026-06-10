@@ -6,6 +6,7 @@ import type {
   UpdateBeneficiaryInput,
 } from "@/lib/validations";
 import { NotFoundError } from "@/lib/errors";
+import { logAuditEvent } from "./audit";
 
 export async function getBeneficiaries(userId: string) {
   return prisma.beneficiary.findMany({
@@ -26,9 +27,9 @@ export async function createBeneficiary(
   userId: string,
   input: CreateBeneficiaryInput
 ) {
-  return prisma.beneficiary.create({
-    data: { ...input, userId },
-  });
+  const beneficiary = await prisma.beneficiary.create({ data: { ...input, userId } });
+  await logAuditEvent({ userId, action: "CREATE", entityType: "Beneficiary", entityId: beneficiary.id });
+  return beneficiary;
 }
 
 export async function updateBeneficiary(
@@ -40,10 +41,9 @@ export async function updateBeneficiary(
     where: { id, userId },
   });
   if (!existing) throw new NotFoundError("Beneficiary");
-  return prisma.beneficiary.update({
-    where: { id, userId },
-    data: input,
-  });
+  const beneficiary = await prisma.beneficiary.update({ where: { id, userId }, data: input });
+  await logAuditEvent({ userId, action: "UPDATE", entityType: "Beneficiary", entityId: id });
+  return beneficiary;
 }
 
 export async function deleteBeneficiary(userId: string, id: string) {
@@ -52,4 +52,5 @@ export async function deleteBeneficiary(userId: string, id: string) {
   });
   if (!existing) throw new NotFoundError("Beneficiary");
   await prisma.beneficiary.delete({ where: { id, userId } });
+  await logAuditEvent({ userId, action: "DELETE", entityType: "Beneficiary", entityId: id });
 }
