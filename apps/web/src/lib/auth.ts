@@ -1,3 +1,5 @@
+import "server-only";
+
 import { auth } from "@vixi/auth";
 import { redirect } from "next/navigation";
 

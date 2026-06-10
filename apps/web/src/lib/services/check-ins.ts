@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@vixi/db";
 import type { CreateCheckInInput, UpdateCheckInInput } from "@/lib/validations";
 import { NotFoundError } from "@/lib/errors";

@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@vixi/db";
 import type { CreateMemoryInput, UpdateMemoryInput } from "@/lib/validations";
 import { NotFoundError } from "@/lib/errors";
