@@ -6,7 +6,13 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "clean": "turbo clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo typecheck",
+    "db:generate": "pnpm --filter @vixi/db db:generate",
+    "db:push": "pnpm --filter @vixi/db db:push",
+    "db:migrate": "pnpm --filter @vixi/db db:migrate",
+    "db:studio": "pnpm --filter @vixi/db db:studio",
+    "db:seed": "pnpm --filter @vixi/db db:seed"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
