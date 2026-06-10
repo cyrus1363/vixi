@@ -1,85 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
-import {
-  deleteCheckIn,
-  getCheckIn,
-  updateCheckIn,
-} from "@/lib/services";
+import { requireApiSession, parseBody, handleApiError } from "@/lib/api";
+import { deleteCheckIn, getCheckIn, updateCheckIn } from "@/lib/services";
 import { updateCheckInSchema } from "@/lib/validations";
-import { NotFoundError, ValidationError } from "@/lib/errors";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_req: NextRequest, { params }: Params) {
-  const session = await getSession();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireApiSession();
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
   try {
-    const checkIn = await getCheckIn(session.user.id, id);
+    const checkIn = await getCheckIn(auth.session.user.id, id);
     return NextResponse.json(checkIn);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return NextResponse.json({ error: err.message }, { status: 404 });
-    }
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
+    return handleApiError(err);
   }
 }
 
 export async function PATCH(req: NextRequest, { params }: Params) {
-  const session = await getSession();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireApiSession();
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
-  const body = await req.json();
-  const parsed = updateCheckInSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Validation failed", issues: parsed.error.issues },
-      { status: 400 }
-    );
-  }
+  const body = await parseBody(req, updateCheckInSchema);
+  if (body instanceof NextResponse) return body;
   try {
-    const checkIn = await updateCheckIn(session.user.id, id, parsed.data);
+    const checkIn = await updateCheckIn(auth.session.user.id, id, body.data);
     return NextResponse.json(checkIn);
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return NextResponse.json({ error: err.message }, { status: 404 });
-    }
-    if (err instanceof ValidationError) {
-      return NextResponse.json(
-        { error: err.message, issues: err.issues },
-        { status: 400 }
-      );
-    }
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
+    return handleApiError(err);
   }
 }
 
 export async function DELETE(_req: NextRequest, { params }: Params) {
-  const session = await getSession();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireApiSession();
+  if (auth instanceof NextResponse) return auth;
   const { id } = await params;
   try {
-    await deleteCheckIn(session.user.id, id);
+    await deleteCheckIn(auth.session.user.id, id);
     return new NextResponse(null, { status: 204 });
   } catch (err) {
-    if (err instanceof NotFoundError) {
-      return NextResponse.json({ error: err.message }, { status: 404 });
-    }
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
+    return handleApiError(err);
   }
 }
