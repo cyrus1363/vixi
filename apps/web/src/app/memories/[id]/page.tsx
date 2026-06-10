@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Button, Card } from "@vixi/ui";
@@ -50,15 +49,16 @@ async function MemoryDetailContent({ params }: Params) {
       </h1>
 
       {memory.mediaUrl && (
-        <div className="relative mt-6 h-64 overflow-hidden rounded-xl border border-stone-200 bg-stone-100">
-          <Image
-            src={memory.mediaUrl}
-            alt={memory.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 768px"
-            className="object-cover"
-            unoptimized
-          />
+        <div className="mt-6 rounded-xl border border-stone-200 bg-stone-50 px-5 py-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-vixi-stone">Media</p>
+          <a
+            href={memory.mediaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 block truncate text-sm text-vixi-teal underline underline-offset-2 hover:text-vixi-dark"
+          >
+            {memory.mediaUrl} ↗
+          </a>
         </div>
       )}
 

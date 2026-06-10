@@ -166,6 +166,9 @@ export function MemoryForm({
             {errors.mediaUrl.message as string}
           </p>
         )}
+        <p className="mt-1 text-xs text-vixi-stone">
+          Media uploads are not enabled yet. Save an external reference link (e.g. a shared Google Photos URL).
+        </p>
       </div>
 
       <div>

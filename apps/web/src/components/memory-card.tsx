@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 type MemoryCardProps = {
   id: string;
@@ -22,15 +21,16 @@ export function MemoryCard({
       className="block rounded-xl border border-stone-200 bg-white shadow-sm outline-none motion-safe:transition focus-visible:ring-2 focus-visible:ring-vixi-teal focus-visible:ring-offset-2 motion-safe:hover:border-vixi-teal motion-safe:hover:shadow-md"
     >
       {mediaUrl && (
-        <div className="relative h-40 w-full overflow-hidden rounded-t-xl bg-stone-100">
-          <Image
-            src={mediaUrl}
-            alt={title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover"
-            unoptimized
-          />
+        <div className="flex items-center rounded-t-xl border-b border-stone-100 bg-stone-50 px-5 py-3">
+          <a
+            href={mediaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="truncate text-sm text-vixi-teal underline underline-offset-2 hover:text-vixi-dark"
+          >
+            View media ↗
+          </a>
         </div>
       )}
       <div className="p-5">
