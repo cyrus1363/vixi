@@ -52,7 +52,6 @@ if (googleClientId && googleClientSecret) {
     Google({
       clientId: googleClientId,
       clientSecret: googleClientSecret,
-      allowDangerousEmailAccountLinking: true,
     })
   );
 }
