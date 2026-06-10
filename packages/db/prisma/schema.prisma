@@ -55,6 +55,7 @@ model User {
   memories      Memory[]
   checkIns      CheckIn[]
   auditLogs     AuditLog[]
+  consents      UserConsent[]
 
   @@map("users")
 }
@@ -195,4 +196,25 @@ enum AuditAction {
   UPDATE
   DELETE
   VIEW
+}
+
+model UserConsent {
+  id          String      @id @default(cuid())
+  userId      String      @map("user_id")
+  consentType ConsentType
+  version     String
+  acceptedAt  DateTime    @default(now()) @map("accepted_at")
+  ipAddress   String?     @map("ip_address")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, consentType, version])
+  @@map("user_consents")
+}
+
+enum ConsentType {
+  TERMS_OF_SERVICE
+  PRIVACY_POLICY
+  NOT_LEGAL_ADVICE_DISCLAIMER
+  AI_AVATAR_CONSENT
 }
