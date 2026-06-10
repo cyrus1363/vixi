@@ -10,6 +10,7 @@ import {
   Camera,
   Users,
   Clock,
+  ScrollText,
   LogOut,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ const navItems = [
   { href: "/memories", label: "Memories", icon: Camera },
   { href: "/beneficiaries", label: "Trusted Contacts", icon: Users },
   { href: "/check-ins", label: "Check-ins", icon: Clock },
+  { href: "/wishes", label: "Wishes", icon: ScrollText },
 ];
 
 export function Sidebar() {

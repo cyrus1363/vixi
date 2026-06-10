@@ -56,6 +56,7 @@ model User {
   checkIns      CheckIn[]
   auditLogs     AuditLog[]
   consents      UserConsent[]
+  finalWishes   FinalWish[]
 
   @@map("users")
 }
@@ -243,4 +244,29 @@ enum InviteStatus {
   INVITED
   ACCEPTED
   DECLINED
+}
+
+enum WishCategory {
+  FUNERAL_PREFERENCE
+  BURIAL_CREMATION
+  PEOPLE_TO_NOTIFY
+  PET_CARE
+  DIGITAL_ACCOUNTS
+  LEGAL_NOTES
+  OTHER
+}
+
+model FinalWish {
+  id         String       @id @default(cuid())
+  userId     String       @map("user_id")
+  category   WishCategory
+  title      String
+  body       String       @db.Text
+  archivedAt DateTime?    @map("archived_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("final_wishes")
 }
